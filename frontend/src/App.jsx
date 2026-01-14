@@ -3,8 +3,17 @@ import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 import Dashboard from './components/Dashboard'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
-const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:8080/ws'
+// Use relative URLs when served from same origin, or explicit URLs for dev
+const getApiUrl = () => {
+    // In production (served by nginx), use relative path
+    if (window.location.hostname !== 'localhost' || window.location.port === '3000') {
+        return ''  // Relative - nginx proxies to backend
+    }
+    return 'http://localhost:8080'
+}
+
+const API_URL = getApiUrl()
+const WS_URL = API_URL + '/ws'  // SockJS uses http://, not ws://
 
 function App() {
     const [health, setHealth] = useState(null)
