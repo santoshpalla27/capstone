@@ -20,7 +20,30 @@
     
     <properties>
         <java.version>21</java.version>
+        <!-- Aligned OpenTelemetry versions -->
+        <opentelemetry.version>1.35.0</opentelemetry.version>
+        <opentelemetry-instrumentation.version>2.1.0</opentelemetry-instrumentation.version>
     </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <!-- OpenTelemetry BOM - ensures all OTEL dependencies are version-aligned -->
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom-alpha</artifactId>
+                <version>${opentelemetry-instrumentation.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     
     <dependencies>
         <!-- Web -->
@@ -83,11 +106,10 @@
             <optional>true</optional>
         </dependency>
         
-        <!-- OpenTelemetry -->
+        <!-- OpenTelemetry - version managed by BOM -->
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-spring-boot-starter</artifactId>
-            <version>2.1.0-alpha</version>
         </dependency>
         
         <!-- Test -->
