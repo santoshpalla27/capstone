@@ -3,13 +3,15 @@ package io.capstone.controlplane.health;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 /**
  * WebSocket publisher for live updates to connected clients.
+ * 
+ * NOTE: This class does NOT depend on HealthAggregatorService to avoid circular dependency.
+ * HealthAggregatorService calls publishHealthUpdates() with the data directly.
  */
 @Slf4j
 @Component
@@ -17,15 +19,13 @@ import java.util.Map;
 public class WebSocketPublisher {
 
     private final SimpMessagingTemplate messagingTemplate;
-    private final HealthAggregatorService healthAggregator;
 
     /**
-     * Publish health updates to all connected clients every 5 seconds
+     * Publish health updates to all connected clients
+     * Called by HealthAggregatorService after each health check
      */
-    @Scheduled(fixedRate = 5000)
-    public void publishHealthUpdates() {
+    public void publishHealthUpdates(Map<String, Object> health) {
         try {
-            Map<String, Object> health = healthAggregator.getAggregatedHealth();
             messagingTemplate.convertAndSend("/topic/health", health);
             log.debug("Published health update via WebSocket");
         } catch (Exception e) {

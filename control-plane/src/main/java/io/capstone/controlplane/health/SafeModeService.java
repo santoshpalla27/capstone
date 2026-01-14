@@ -1,5 +1,6 @@
 package io.capstone.controlplane.health;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,13 @@ public class SafeModeService {
     private final AtomicReference<Instant> safeModeTriggeredAt = new AtomicReference<>();
     
     private final WebSocketPublisher webSocketPublisher;
+    private final HealthAggregatorService healthAggregatorService;
+    
+    @PostConstruct
+    public void init() {
+        // Break circular dependency by setting reference after construction
+        healthAggregatorService.setSafeModeService(this);
+    }
 
     /**
      * Check if safe mode is currently active

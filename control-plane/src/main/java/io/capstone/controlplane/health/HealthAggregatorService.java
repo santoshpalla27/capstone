@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,10 +31,17 @@ public class HealthAggregatorService {
 
     private final DataSource dataSource;
     private final StringRedisTemplate redisTemplate;
-    private final SafeModeService safeModeService;
+    private final WebSocketPublisher webSocketPublisher;
     
     @Value("${spring.kafka.bootstrap-servers:localhost:9092}")
     private String kafkaBootstrapServers;
+    
+    // SafeModeService is set via setter injection to break circular dependency
+    private SafeModeService safeModeService;
+    
+    public void setSafeModeService(SafeModeService safeModeService) {
+        this.safeModeService = safeModeService;
+    }
     
     // Cached health snapshot - served on every request
     private final AtomicReference<HealthSnapshot> cachedSnapshot = new AtomicReference<>(
@@ -106,8 +112,13 @@ public class HealthAggregatorService {
         );
         cachedSnapshot.set(newSnapshot);
         
+        // Publish health update via WebSocket
+        webSocketPublisher.publishHealthUpdates(getAggregatedHealth());
+        
         // Autonomous safe-mode evaluation based on health status
-        safeModeService.evaluateAndTrigger(overallStatus);
+        if (safeModeService != null) {
+            safeModeService.evaluateAndTrigger(overallStatus);
+        }
         
         log.debug("Health snapshot updated. Status: {}, Ready: {}", overallStatus, ready);
     }
