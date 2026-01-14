@@ -70,7 +70,8 @@ services:
     networks:
       - capstone-net
     healthcheck:
-      test: ["CMD-SHELL", "zookeeper-shell.sh localhost:2181 ls / || exit 1"]
+      # Use Zookeeper's admin server (runs on port 8080 internally)
+      test: ["CMD-SHELL", "curl -s http://localhost:8080/commands/ruok | grep -q ruok"]
       interval: 15s
       timeout: 10s
       retries: 5
