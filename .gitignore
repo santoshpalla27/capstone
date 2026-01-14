@@ -1,0 +1,166 @@
+# ==================== General ====================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.temp
+.env
+.env.local
+.env.*.local
+
+# ==================== IDEs ====================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# NetBeans
+nbproject/
+nbbuild/
+dist/
+nbdist/
+
+# ==================== Java / Spring Boot ====================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot
+spring-shell.log
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ==================== Node.js / React ====================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build output
+dist/
+build/
+.next/
+.nuxt/
+.output/
+
+# Cache
+.npm/
+.eslintcache
+.cache/
+*.tsbuildinfo
+
+# Testing
+coverage/
+.nyc_output/
+
+# ==================== Python ====================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+
+
+
+# ==================== Go ====================
+*.exe
+*.exe~
+*.dll
+*.dylib
+*.test
+*.out
+vendor/
+
+# ==================== Docker ====================
+# Ignore Docker volumes data (if mounted locally)
+docker-data/
+.docker/
+
+# ==================== Databases ====================
+*.sqlite
+*.sqlite3
+*.db
+
+# ==================== Secrets & Credentials ====================
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+secrets/
+credentials/
+.secrets
+
+# ==================== Terraform (for Stage 2+) ====================
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!example.tfvars
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ==================== Kubernetes (for Stage 2+) ====================
+*.kubeconfig
+kubeconfig
+
+# ==================== Misc ====================
+*.bak
+*.swp
+*.swo
+*~
+.history/
+
+# ==================== Project Specific ====================
+# Local development overrides
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Compiled frontend assets (use build system)
+frontend/dist/
+
+# Maven wrapper (downloaded automatically)
+control-plane/.mvn/wrapper/maven-wrapper.jar
+
+# Test outputs
+test-results/
+test-output/
+reports/
+
+combined-code.txt
+combined-code.ps1

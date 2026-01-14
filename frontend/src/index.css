@@ -1,0 +1,336 @@
+/* Design System - Dark Theme with Glassmorphism */
+
+:root {
+    /* Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: rgba(25, 25, 35, 0.8);
+    --bg-glass: rgba(255, 255, 255, 0.05);
+
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0b0;
+    --text-muted: #606070;
+
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+
+    --status-up: #10b981;
+    --status-down: #ef4444;
+    --status-degraded: #f59e0b;
+    --status-unknown: #6b7280;
+
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Spacing */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Glass Card */
+.glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: var(--shadow-glow);
+}
+
+/* Status Indicators */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.up {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--status-up);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.down {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--status-down);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-badge.degraded {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--status-degraded);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-badge.unknown {
+    background: rgba(107, 114, 128, 0.15);
+    color: var(--status-unknown);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+/* Pulse Animation */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Status Dot */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.up {
+    background: var(--status-up);
+    box-shadow: 0 0 10px var(--status-up);
+}
+
+.status-dot.down {
+    background: var(--status-down);
+    box-shadow: 0 0 10px var(--status-down);
+}
+
+.status-dot.degraded {
+    background: var(--status-degraded);
+    box-shadow: 0 0 10px var(--status-degraded);
+}
+
+.status-dot.unknown {
+    background: var(--status-unknown);
+}
+
+/* Layout */
+.dashboard {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.grid {
+    display: grid;
+    gap: 24px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1024px) {
+
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Safe Mode Banner */
+.safe-mode-banner {
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2));
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    border-radius: var(--radius-md);
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: borderPulse 2s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+
+    0%,
+    100% {
+        border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    50% {
+        border-color: rgba(239, 68, 68, 0.9);
+    }
+}
+
+.safe-mode-banner .icon {
+    font-size: 24px;
+}
+
+.safe-mode-banner .content h3 {
+    color: var(--status-down);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.safe-mode-banner .content p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Component Cards */
+.component-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.component-card .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.component-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.component-card .meta {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Button */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--accent-gradient);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--status-down);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.3);
+}
+
+/* Connection Status */
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.connection-status.connected {
+    color: var(--status-up);
+}
+
+.connection-status.disconnected {
+    color: var(--status-down);
+}
+
+/* Overview Card */
+.overview-card {
+    text-align: center;
+    padding: 32px;
+}
+
+.overview-card .value {
+    font-size: 48px;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+}
+
+.overview-card .label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

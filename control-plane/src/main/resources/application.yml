@@ -1,0 +1,81 @@
+# Application Configuration
+spring:
+  application:
+    name: control-plane
+
+  # MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/controlplane?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: cpuser
+    password: cppassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: redispassword
+      timeout: 5000ms
+
+  # Kafka
+  kafka:
+    bootstrap-servers: localhost:29092
+    consumer:
+      group-id: control-plane
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+# Server
+server:
+  port: 8080
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    io.capstone: DEBUG
+    org.springframework.web.socket: DEBUG
+
+---
+# Docker profile
+spring:
+  config:
+    activate:
+      on-profile: docker
+  
+  datasource:
+    url: jdbc:mysql://mysql:3306/controlplane?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+  
+  data:
+    redis:
+      host: redis
+  
+  kafka:
+    bootstrap-servers: kafka:9092

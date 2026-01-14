@@ -1,0 +1,46 @@
+# OpenTelemetry Collector Configuration
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 1000
+
+exporters:
+  debug:
+    verbosity: basic
+  
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: capstone
+  
+  elasticsearch:
+    endpoints: ["http://elasticsearch:9200"]
+    logs_index: capstone-logs
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, elasticsearch]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [debug, elasticsearch]
