@@ -70,11 +70,11 @@ services:
     networks:
       - capstone-net
     healthcheck:
-      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok"]
-      interval: 10s
-      timeout: 5s
+      test: ["CMD-SHELL", "zookeeper-shell.sh localhost:2181 ls / || exit 1"]
+      interval: 15s
+      timeout: 10s
       retries: 5
-      start_period: 15s
+      start_period: 30s
 
   kafka:
     image: confluentinc/cp-kafka:7.5.0
