@@ -24,7 +24,6 @@ public class SafeModeService {
     private final AtomicReference<String> safeModeReason = new AtomicReference<>("");
     private final AtomicReference<Instant> safeModeTriggeredAt = new AtomicReference<>();
     
-    private final HealthAggregatorService healthAggregator;
     private final WebSocketPublisher webSocketPublisher;
 
     /**
@@ -83,17 +82,17 @@ public class SafeModeService {
     }
 
     /**
-     * Auto-trigger safe mode based on health status
-     * Called periodically by the health aggregator
+     * Auto-trigger safe mode based on health status.
+     * Called by HealthAggregatorService with the current status to avoid circular dependency.
+     * 
+     * @param healthStatus Current overall health status (UP, DOWN, DEGRADED)
      */
-    public void evaluateAndTrigger() {
-        Map<String, Object> health = healthAggregator.getAggregatedHealth();
-        String status = (String) health.get("status");
-        
-        if ("DOWN".equals(status) && !safeModeActive.get()) {
+    public void evaluateAndTrigger(String healthStatus) {
+        if ("DOWN".equals(healthStatus) && !safeModeActive.get()) {
             triggerSafeMode("Automatic trigger: All infrastructure components are DOWN");
-        } else if ("UP".equals(status) && safeModeActive.get()) {
+        } else if ("UP".equals(healthStatus) && safeModeActive.get()) {
             resolveSafeMode();
         }
+        // DEGRADED does not auto-trigger or auto-resolve - manual intervention preferred
     }
 }

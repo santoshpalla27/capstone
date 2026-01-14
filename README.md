@@ -29,5 +29,7 @@ Frontend (React) ←→ Backend (Spring Boot) → Redis/MySQL/Kafka
             Monitoring (OTEL/Prometheus/Grafana)
 ```
 
+> **Note:** Stage 1 uses Zookeeper-based Kafka for tooling compatibility. KRaft mode planned for Stage 2.
+
 ## Stage 2 (Future)
 - API Gateway + Polyglot Microservices (Go, Java, Python, Node.js)

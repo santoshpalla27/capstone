@@ -26,15 +26,23 @@ function InfrastructurePanel({ components }) {
 
     return (
         <div className="grid grid-3">
-            {Object.entries(components).map(([name, component]) => (
-                <StatusCard
-                    key={name}
-                    name={`${INFRA_ICONS[name] || INFRA_ICONS.default} ${name.charAt(0).toUpperCase() + name.slice(1)}`}
-                    status={component.status}
-                    lastCheck={component.lastCheck}
-                    message={INFRA_DESCRIPTIONS[name] || component.message}
-                />
-            ))}
+            {Object.entries(components).map(([name, component]) => {
+                const description = INFRA_DESCRIPTIONS[name] || '';
+                // Show description always, plus actual error if status is not UP
+                const message = component.status === 'UP'
+                    ? description
+                    : `${description}${description && component.message ? ' • ' : ''}${component.message || ''}`;
+
+                return (
+                    <StatusCard
+                        key={name}
+                        name={`${INFRA_ICONS[name] || INFRA_ICONS.default} ${name.charAt(0).toUpperCase() + name.slice(1)}`}
+                        status={component.status}
+                        lastCheck={component.lastCheck}
+                        message={message}
+                    />
+                );
+            })}
         </div>
     )
 }

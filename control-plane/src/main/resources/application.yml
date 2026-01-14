@@ -3,12 +3,17 @@ spring:
   application:
     name: control-plane
 
-  # MySQL
+  # MySQL - Topology-agnostic configuration
   datasource:
     url: jdbc:mysql://localhost:3306/controlplane?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: cpuser
     password: cppassword
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 5000
+      validation-timeout: 3000
+      maximum-pool-size: 10
+      minimum-idle: 2
   
   jpa:
     hibernate:
@@ -18,27 +23,58 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-  # Redis
+  # Redis - TOPOLOGY-AGNOSTIC CONFIGURATION
+  # Supports: single node, sentinel, cluster, managed cloud
   data:
     redis:
-      host: localhost
-      port: 6379
-      password: redispassword
+      # Single node (default)
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:redispassword}
       timeout: 5000ms
+      connect-timeout: 3000ms
+      
+      # Cluster mode (uncomment for Redis Cluster)
+      # cluster:
+      #   nodes:
+      #     - redis-node-1:6379
+      #     - redis-node-2:6379
+      #     - redis-node-3:6379
+      #   max-redirects: 3
+      
+      # Sentinel mode (uncomment for Redis Sentinel)
+      # sentinel:
+      #   master: mymaster
+      #   nodes:
+      #     - sentinel-1:26379
+      #     - sentinel-2:26379
+      #     - sentinel-3:26379
+      
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 2
+        shutdown-timeout: 100ms
 
-  # Kafka
+  # Kafka - Topology-agnostic configuration
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
     consumer:
       group-id: control-plane
       auto-offset-reset: earliest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      # Resilience settings
+      request.timeout.ms: 5000
+      session.timeout.ms: 10000
 
 # Server
 server:
   port: 8080
+  shutdown: graceful
 
 # Actuator
 management:
@@ -56,6 +92,11 @@ management:
       enabled: true
     db:
       enabled: true
+
+# Health check settings
+health:
+  check:
+    interval: 5000
 
 # Logging
 logging:
@@ -75,7 +116,8 @@ spring:
   
   data:
     redis:
-      host: redis
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
   
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}

@@ -122,19 +122,21 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # OTEL settings - ensure observability never becomes a blocking dependency
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+      OTEL_EXPORTER_OTLP_TIMEOUT: 2000
       OTEL_SERVICE_NAME: control-plane
     ports:
       - "8080:8080"
     networks:
       - capstone-net
+    # NOTE: Simple ordering only - backend MUST start even if infra is down
+    # Control planes self-heal, not babysat by orchestrators
     depends_on:
-      redis:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
+      - redis
+      - mysql
+      - kafka
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/liveness"]
       interval: 15s

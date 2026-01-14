@@ -17,10 +17,10 @@ function Dashboard({ health, safeMode, connected, error, onToggleSafeMode }) {
         <div className="dashboard">
             {/* Header */}
             <header className="header">
-                <h1>⚡ Control Plane</h1>
+                <h1>&#x26A1; Control Plane</h1>
                 <div className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
                     <span className={`status-dot ${connected ? 'up' : 'down'}`}></span>
-                    {connected ? 'Live' : 'Polling'}
+                    {connected ? 'Live Updates' : 'Polling (WS disconnected)'}
                 </div>
             </header>
 
