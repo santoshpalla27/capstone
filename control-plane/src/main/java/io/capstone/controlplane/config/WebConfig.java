@@ -1,25 +1,24 @@
 package io.capstone.controlplane.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * CORS configuration for frontend access.
- * 
- * SECURITY NOTE: This permissive configuration is for LOCAL DEVELOPMENT ONLY.
- * TODO: Lock down in Stage 2 with explicit allowed origins:
- *   - Production: Only allow specific frontend domains
- *   - Use environment-based configuration
+ * Reads allowed origins from environment variable CORS_ALLOWED_ORIGINS.
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${cors.allowed-origins:*}")
+    private String allowedOrigins;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // WARNING: Dev-only - must be locked down in production (Stage 2+)
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns(allowedOrigins.split(","))
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

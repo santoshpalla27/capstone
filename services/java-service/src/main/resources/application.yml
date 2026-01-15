@@ -1,0 +1,59 @@
+server:
+  port: ${SERVER_PORT:3002}
+  shutdown: graceful
+
+spring:
+  application:
+    name: java-service
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:kafka:29092}
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# Resilience4j configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      kafka:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 30s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  retry:
+    instances:
+      kafka:
+        maxAttempts: 3
+        waitDuration: 1s
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - java.lang.RuntimeException
+
+services:
+  go:
+    url: ${GO_SERVICE_URL:http://go-service:3001}
+  python:
+    url: ${PYTHON_SERVICE_URL:http://python-service:3003}
+  node:
+    url: ${NODE_SERVICE_URL:http://node-service:3004}
+
+logging:
+  level:
+    io.capstone: INFO
+    org.apache.kafka: WARN

@@ -123,6 +123,10 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD:-redispassword}
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      # Microservices API Gateway URL
+      MICROSERVICES_GATEWAY_URL: ${MICROSERVICES_GATEWAY_URL:-http://api-gateway:8000}
+      # CORS configuration
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-*}
       # OTEL settings - ensure observability never becomes a blocking dependency
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc

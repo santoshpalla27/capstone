@@ -1,0 +1,177 @@
+##############################################################
+# Stage 2: Microservices Execution Plane
+# 
+# Usage: docker compose -f docker-compose.yml -f docker-compose.services.yml up -d
+# Depends on: docker-compose.yml (infrastructure layer)
+##############################################################
+
+services:
+  ##############################################################
+  # API GATEWAY - Node.js (Express)
+  ##############################################################
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    environment:
+      - PORT=8000
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - RATE_LIMIT=100
+      - CORS_ORIGIN=*
+      - GO_SERVICE_URL=http://go-service:3001
+      - JAVA_SERVICE_URL=http://java-service:3002
+      - PYTHON_SERVICE_URL=http://python-service:3003
+      - NODE_SERVICE_URL=http://node-service:3004
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    ports:
+      - "8000:8000"
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  ##############################################################
+  # MONGODB - Document Database
+  ##############################################################
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-mongopass}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./config/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  ##############################################################
+  # GO SERVICE - Uses MongoDB
+  ##############################################################
+  go-service:
+    build:
+      context: ./services/go-service
+      dockerfile: Dockerfile
+    container_name: go-service
+    environment:
+      - PORT=3001
+      - MONGO_URI=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-mongopass}@mongodb:27017/go_service_db?authSource=admin
+      - JAVA_SERVICE_URL=http://java-service:3002
+      - PYTHON_SERVICE_URL=http://python-service:3003
+      - NODE_SERVICE_URL=http://node-service:3004
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  ##############################################################
+  # JAVA SERVICE - Uses Kafka (Stateless)
+  ##############################################################
+  java-service:
+    build:
+      context: ./services/java-service
+      dockerfile: Dockerfile
+    container_name: java-service
+    environment:
+      - SERVER_PORT=3002
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - GO_SERVICE_URL=http://go-service:3001
+      - PYTHON_SERVICE_URL=http://python-service:3003
+      - NODE_SERVICE_URL=http://node-service:3004
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3002/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  ##############################################################
+  # PYTHON SERVICE - Uses MongoDB
+  ##############################################################
+  python-service:
+    build:
+      context: ./services/python-service
+      dockerfile: Dockerfile
+    container_name: python-service
+    environment:
+      - PORT=3003
+      - MONGO_URI=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-mongopass}@mongodb:27017/python_service_db?authSource=admin
+      - GO_SERVICE_URL=http://go-service:3001
+      - JAVA_SERVICE_URL=http://java-service:3002
+      - NODE_SERVICE_URL=http://node-service:3004
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  ##############################################################
+  # NODE SERVICE - Uses Kafka (Stateless)
+  ##############################################################
+  node-service:
+    build:
+      context: ./services/node-service
+      dockerfile: Dockerfile
+    container_name: node-service
+    environment:
+      - PORT=3004
+      - KAFKA_BROKERS=kafka:29092
+      - GO_SERVICE_URL=http://go-service:3001
+      - JAVA_SERVICE_URL=http://java-service:3002
+      - PYTHON_SERVICE_URL=http://python-service:3003
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+    networks:
+      - capstone-net
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3004/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+##############################################################
+# VOLUMES
+##############################################################
+volumes:
+  mongodb_data:
+    driver: local
+
+##############################################################
+# NETWORKS - Use existing network from docker-compose.yml
+##############################################################
+networks:
+  capstone-net:
+    external: true

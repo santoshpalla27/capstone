@@ -1,6 +1,7 @@
 import StatusCard from './StatusCard'
 import SafeModeBanner from './SafeModeBanner'
 import InfrastructurePanel from './InfrastructurePanel'
+import MicroservicesPanel from './MicroservicesPanel'
 
 function Dashboard({ health, safeMode, connected, error, onToggleSafeMode }) {
     const getOverallStatus = () => {
@@ -71,6 +72,11 @@ function Dashboard({ health, safeMode, connected, error, onToggleSafeMode }) {
                     Infrastructure Status
                 </h2>
                 <InfrastructurePanel components={health?.components} />
+            </section>
+
+            {/* Microservices Panel */}
+            <section style={{ marginBottom: 32 }}>
+                <MicroservicesPanel />
             </section>
 
             {/* Safe Mode Toggle */}
