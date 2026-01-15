@@ -97,7 +97,7 @@ services:
     container_name: java-service
     environment:
       - SERVER_PORT=3002
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092,kafka:29092
       - GO_SERVICE_URL=http://go-service:3001
       - PYTHON_SERVICE_URL=http://python-service:3003
       - NODE_SERVICE_URL=http://node-service:3004
@@ -149,7 +149,7 @@ services:
     container_name: node-service
     environment:
       - PORT=3004
-      - KAFKA_BROKERS=kafka:29092
+      - KAFKA_BROKERS=kafka:9092,kafka:29092
       - GO_SERVICE_URL=http://go-service:3001
       - JAVA_SERVICE_URL=http://java-service:3002
       - PYTHON_SERVICE_URL=http://python-service:3003
