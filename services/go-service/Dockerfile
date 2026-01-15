@@ -15,5 +15,5 @@ USER appuser
 ENV PORT=3001
 EXPOSE 3001
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-  CMD wget -q --spider http://localhost:3001/health || exit 1
+  CMD wget -q -O /dev/null http://localhost:3001/health || exit 1
 CMD ["./main"]
