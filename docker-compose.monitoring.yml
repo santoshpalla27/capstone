@@ -32,7 +32,7 @@ services:
     networks:
       - capstone-net
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:13133/"]
+      test: ["CMD-SHELL", "curl -f http://localhost:13133/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
