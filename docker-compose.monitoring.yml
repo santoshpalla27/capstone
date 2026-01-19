@@ -31,12 +31,8 @@ services:
       - "13133:13133" # Health check
     networks:
       - capstone-net
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:13133/ || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+    # Health check disabled - container has no curl/wget
+    # Prometheus scrape confirms health via otel-collector target
 
   # ==================== PROMETHEUS ====================
   prometheus:
