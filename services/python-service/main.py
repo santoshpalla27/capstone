@@ -228,8 +228,9 @@ async def get_data():
 
 @app.get("/metrics")
 async def metrics():
-    return JSONResponse(
-        content=generate_latest().decode('utf-8'),
+    from starlette.responses import Response
+    return Response(
+        content=generate_latest(),
         media_type=CONTENT_TYPE_LATEST
     )
 

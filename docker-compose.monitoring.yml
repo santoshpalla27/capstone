@@ -192,3 +192,16 @@ services:
       - capstone-net
     ports:
       - "9216:9216"
+
+  # Kafka Exporter
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: capstone-kafka-exporter
+    restart: unless-stopped
+    command:
+      - "--kafka.server=kafka:9092"
+    networks:
+      - capstone-net
+    ports:
+      - "9308:9308"
+
