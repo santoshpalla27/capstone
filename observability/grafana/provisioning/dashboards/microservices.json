@@ -1,0 +1,672 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": null,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "gridPos": {
+                "h": 2,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "content": "# 🔌 Microservices Dashboard",
+                "mode": "markdown"
+            },
+            "title": "",
+            "type": "text"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "0": {
+                                    "color": "red",
+                                    "text": "DOWN"
+                                },
+                                "1": {
+                                    "color": "green",
+                                    "text": "UP"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 6,
+                "x": 0,
+                "y": 2
+            },
+            "id": 2,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "targets": [
+                {
+                    "expr": "up{job=\"go-service\"}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Go Service",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "0": {
+                                    "color": "red",
+                                    "text": "DOWN"
+                                },
+                                "1": {
+                                    "color": "green",
+                                    "text": "UP"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 6,
+                "x": 6,
+                "y": 2
+            },
+            "id": 3,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "targets": [
+                {
+                    "expr": "up{job=\"java-service\"}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Java Service",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "0": {
+                                    "color": "red",
+                                    "text": "DOWN"
+                                },
+                                "1": {
+                                    "color": "green",
+                                    "text": "UP"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 6,
+                "x": 12,
+                "y": 2
+            },
+            "id": 4,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "targets": [
+                {
+                    "expr": "up{job=\"python-service\"}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Python Service",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [
+                        {
+                            "options": {
+                                "0": {
+                                    "color": "red",
+                                    "text": "DOWN"
+                                },
+                                "1": {
+                                    "color": "green",
+                                    "text": "UP"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                }
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 6,
+                "x": 18,
+                "y": 2
+            },
+            "id": 5,
+            "options": {
+                "colorMode": "background",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "targets": [
+                {
+                    "expr": "up{job=\"node-service\"}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Node Service",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 15,
+                        "gradientMode": "opacity",
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "reqps"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 5
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "mean",
+                        "max"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(go_service_requests_total[5m]))",
+                    "legendFormat": "Go",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum(rate(http_server_requests_seconds_count{job=\"java-service\"}[5m]))",
+                    "legendFormat": "Java",
+                    "refId": "B"
+                },
+                {
+                    "expr": "sum(rate(python_service_requests_total[5m]))",
+                    "legendFormat": "Python",
+                    "refId": "C"
+                },
+                {
+                    "expr": "sum(rate(node_service_requests_total[5m]))",
+                    "legendFormat": "Node",
+                    "refId": "D"
+                }
+            ],
+            "title": "📈 Request Rate by Service",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 15,
+                        "gradientMode": "opacity",
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "reqps"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 5
+            },
+            "id": 7,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "mean",
+                        "max"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(go_service_requests_total{status=\"error\"}[5m]))",
+                    "legendFormat": "Go Errors",
+                    "refId": "A"
+                },
+                {
+                    "expr": "sum(rate(python_service_requests_total{status=\"error\"}[5m]))",
+                    "legendFormat": "Python Errors",
+                    "refId": "C"
+                },
+                {
+                    "expr": "sum(rate(node_service_requests_total{status=\"error\"}[5m]))",
+                    "legendFormat": "Node Errors",
+                    "refId": "D"
+                }
+            ],
+            "title": "❌ Error Rate by Service",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 2,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "s"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 13
+            },
+            "id": 8,
+            "options": {
+                "legend": {
+                    "calcs": [
+                        "mean",
+                        "p95"
+                    ],
+                    "displayMode": "table",
+                    "placement": "right",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "desc"
+                }
+            },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(go_service_mongo_latency_seconds_bucket[5m])) by (le))",
+                    "legendFormat": "Go MongoDB p95",
+                    "refId": "A"
+                },
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(python_service_request_latency_seconds_bucket[5m])) by (le))",
+                    "legendFormat": "Python Request p95",
+                    "refId": "B"
+                },
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(node_service_kafka_latency_seconds_bucket[5m])) by (le))",
+                    "legendFormat": "Node Kafka p95",
+                    "refId": "C"
+                }
+            ],
+            "title": "⏱️ Latency p95",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 100,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 90
+                            },
+                            {
+                                "color": "green",
+                                "value": 99
+                            }
+                        ]
+                    },
+                    "unit": "percent"
+                }
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 13
+            },
+            "id": 9,
+            "options": {
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+            },
+            "targets": [
+                {
+                    "expr": "100 - (sum(rate(go_service_requests_total{status=\"error\"}[5m])) / sum(rate(go_service_requests_total[5m])) * 100)",
+                    "legendFormat": "Go Service",
+                    "refId": "A"
+                },
+                {
+                    "expr": "100 - (sum(rate(python_service_requests_total{status=\"error\"}[5m])) / sum(rate(python_service_requests_total[5m])) * 100)",
+                    "legendFormat": "Python Service",
+                    "refId": "B"
+                },
+                {
+                    "expr": "100 - (sum(rate(node_service_requests_total{status=\"error\"}[5m])) / sum(rate(node_service_requests_total[5m])) * 100)",
+                    "legendFormat": "Node Service",
+                    "refId": "C"
+                }
+            ],
+            "title": "✅ Success Rate",
+            "type": "gauge"
+        }
+    ],
+    "refresh": "10s",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [
+        "capstone",
+        "microservices"
+    ],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-1h",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Microservices",
+    "uid": "capstone-microservices",
+    "version": 1,
+    "weekStart": ""
+}

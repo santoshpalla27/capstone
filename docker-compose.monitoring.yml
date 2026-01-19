@@ -1,5 +1,10 @@
-# Monitoring Docker Compose
-# Observability stack (run independently)
+# ============================================================
+# Monitoring Docker Compose - Complete Observability Stack
+# ============================================================
+# EFK (Elasticsearch, Fluentd, Kibana) + Prometheus + Grafana
+#
+# Usage: docker compose -f docker-compose.monitoring.yml up -d
+# ============================================================
 
 networks:
   capstone-net:
@@ -11,6 +16,7 @@ volumes:
   grafana-data:
 
 services:
+  # ==================== OTEL COLLECTOR ====================
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.91.0
     container_name: capstone-otel-collector
@@ -25,11 +31,12 @@ services:
     networks:
       - capstone-net
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:13133/"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:13133/"]
       interval: 10s
       timeout: 5s
       retries: 3
 
+  # ==================== PROMETHEUS ====================
   prometheus:
     image: prom/prometheus:v2.48.0
     container_name: capstone-prometheus
@@ -37,8 +44,9 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=7d"
+      - "--storage.tsdb.retention.time=15d"
       - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
     volumes:
       - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
@@ -46,9 +54,13 @@ services:
       - "9090:9090"
     networks:
       - capstone-net
-    depends_on:
-      - otel-collector
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
+  # ==================== ELASTICSEARCH ====================
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.3
     container_name: capstone-elasticsearch
@@ -56,6 +68,7 @@ services:
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -70,14 +83,58 @@ services:
       retries: 5
       start_period: 60s
 
+  # ==================== KIBANA ====================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.3
+    container_name: capstone-kibana
+    restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - SERVER_NAME=capstone-kibana
+      - XPACK_SECURITY_ENABLED=false
+    ports:
+      - "5601:5601"
+    networks:
+      - capstone-net
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:5601/api/status | grep -q 'available'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+  # ==================== FLUENTD ====================
+  fluentd:
+    build:
+      context: ./observability/fluentd
+      dockerfile: Dockerfile
+    container_name: capstone-fluentd
+    restart: unless-stopped
+    volumes:
+      - ./observability/fluentd/fluent.conf:/fluentd/etc/fluent.conf:ro
+      - /var/lib/docker/containers:/fluentd/log/containers:ro
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    networks:
+      - capstone-net
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # ==================== GRAFANA ====================
   grafana:
     image: grafana/grafana:10.2.3
     container_name: capstone-grafana
     restart: unless-stopped
     environment:
-      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD:-grafana}
+      - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD:-admin123}
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/overview.json
     volumes:
       - grafana-data:/var/lib/grafana
       - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -88,3 +145,50 @@ services:
     depends_on:
       - prometheus
       - elasticsearch
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:3000/api/health | grep -q 'ok'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==================== INFRASTRUCTURE EXPORTERS ====================
+  
+  # Redis Exporter
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.55.0
+    container_name: capstone-redis-exporter
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword}
+    networks:
+      - capstone-net
+    ports:
+      - "9121:9121"
+
+  # MySQL Exporter
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.15.1
+    container_name: capstone-mysql-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=exporter:exporter@(mysql:3306)/
+    command:
+      - "--mysqld.address=mysql:3306"
+      - "--mysqld.username=root"
+    networks:
+      - capstone-net
+    ports:
+      - "9104:9104"
+
+  # MongoDB Exporter
+  mongodb-exporter:
+    image: percona/mongodb_exporter:0.40.0
+    container_name: capstone-mongodb-exporter
+    restart: unless-stopped
+    environment:
+      - MONGODB_URI=mongodb://${MONGO_ROOT_USER:-admin}:${MONGO_ROOT_PASSWORD:-mongopass}@mongodb:27017/admin
+    networks:
+      - capstone-net
+    ports:
+      - "9216:9216"

@@ -1,0 +1,170 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "gridPos": {"h": 3, "w": 24, "x": 0, "y": 0},
+      "id": 1,
+      "options": {
+        "content": "# 🎯 Capstone Platform Overview\nReal-time monitoring of all platform components",
+        "mode": "markdown"
+      },
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"},
+            {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}
+          ],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 0, "y": 3},
+      "id": 2,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"control-plane\"}", "refId": "A"}],
+      "title": "Control Plane",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"}, {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 4, "y": 3},
+      "id": 3,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"api-gateway\"}", "refId": "A"}],
+      "title": "API Gateway",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"}, {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 8, "y": 3},
+      "id": 4,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"go-service\"}", "refId": "A"}],
+      "title": "Go Service",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"}, {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 12, "y": 3},
+      "id": 5,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"java-service\"}", "refId": "A"}],
+      "title": "Java Service",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"}, {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 16, "y": 3},
+      "id": 6,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"python-service\"}", "refId": "A"}],
+      "title": "Python Service",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"options": {"1": {"color": "green", "text": "UP"}}, "type": "value"}, {"options": {"0": {"color": "red", "text": "DOWN"}}, "type": "value"}],
+          "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}
+        }
+      },
+      "gridPos": {"h": 4, "w": 4, "x": 20, "y": 3},
+      "id": 7,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto"},
+      "targets": [{"expr": "up{job=\"node-service\"}", "refId": "A"}],
+      "title": "Node Service",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": {"legend": false, "tooltip": false, "viz": false}, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": {"type": "linear"}, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}, "thresholdsStyle": {"mode": "off"}}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 7},
+      "id": 8,
+      "options": {"legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {"expr": "rate(gateway_http_request_duration_seconds_count[5m])", "legendFormat": "API Gateway", "refId": "A"},
+        {"expr": "rate(go_service_requests_total[5m])", "legendFormat": "Go Service", "refId": "B"},
+        {"expr": "rate(http_server_requests_seconds_count{job=\"java-service\"}[5m])", "legendFormat": "Java Service", "refId": "C"},
+        {"expr": "rate(python_service_requests_total[5m])", "legendFormat": "Python Service", "refId": "D"},
+        {"expr": "rate(node_service_requests_total[5m])", "legendFormat": "Node Service", "refId": "E"}
+      ],
+      "title": "Request Rate (req/s)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "barAlignment": 0, "drawStyle": "line", "fillOpacity": 10, "gradientMode": "none", "hideFrom": {"legend": false, "tooltip": false, "viz": false}, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": {"type": "linear"}, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}, "thresholdsStyle": {"mode": "off"}}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 7},
+      "id": 9,
+      "options": {"legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "desc"}},
+      "targets": [
+        {"expr": "histogram_quantile(0.95, rate(gateway_http_request_duration_seconds_bucket[5m]))", "legendFormat": "API Gateway p95", "refId": "A"},
+        {"expr": "histogram_quantile(0.95, rate(go_service_mongo_latency_seconds_bucket[5m]))", "legendFormat": "Go MongoDB p95", "refId": "B"}
+      ],
+      "title": "Latency (p95)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 1}, {"color": "red", "value": 50}]}, "unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 6, "w": 24, "x": 0, "y": 15},
+      "id": 10,
+      "options": {"displayMode": "lcd", "minVizHeight": 10, "minVizWidth": 0, "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showUnfilled": true},
+      "targets": [
+        {"expr": "100 * (1 - (rate(gateway_service_requests_total{status=\"error\"}[5m]) / rate(gateway_service_requests_total[5m])))", "legendFormat": "API Gateway", "refId": "A"},
+        {"expr": "100 * (1 - (rate(go_service_requests_total{status=\"error\"}[5m]) / rate(go_service_requests_total[5m])))", "legendFormat": "Go Service", "refId": "B"}
+      ],
+      "title": "Success Rate (%)",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["capstone", "overview"],
+  "templating": {"list": []},
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Capstone Platform Overview",
+  "uid": "capstone-overview",
+  "version": 1,
+  "weekStart": ""
+}
